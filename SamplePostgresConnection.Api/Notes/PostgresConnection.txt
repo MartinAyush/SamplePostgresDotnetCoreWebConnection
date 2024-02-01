@@ -1,0 +1,38 @@
+﻿https://medium.com/@saisiva249/how-to-configure-postgres-database-for-a-net-a2ee38f29372
+
+
+1. Install Required NuGet Packages
+
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+
+2. Configure the Database Connection
+
+"ConnectionStrings": {
+  "DefaultConnection": "Server=<ServerName>;Port=<PortNumber>;Database=<Your_Database>;;Username=<Your_Username>;Password=<Your_Password>"
+}
+
+3. Define the Entity Model
+
+4. Create the DbContext Class
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    public DbSet<TodoItem> TodoItems { get; set; }
+}
+
+5. Register DbContext with Dependency Injection
+
+var Configuration = builder.Configuration;
+builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+6. Perform the Initial Migration
+
+Add-Migration "Name of migration"
+
+7. Apply the Migration
+
+Update-Database
